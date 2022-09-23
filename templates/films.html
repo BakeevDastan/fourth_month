@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Films</title>
+</head>
+<body>
+<style>
+    a {
+    display:block
+    }
+</style>
+<a href="/films"><button>All</button></a>
+{% for genres in genre %}
+<a href="/genre/{{genres.id}}/films"><button>{{ genres.title }}</button></a>
+{% endfor%}
+<h1> {{ title }}</h1>
+{% for i in film_list%}
+<div>
+    <h3>Name - {{ i.name }}</h3>
+    <h4>Producer - {{ i.producer }}</h4>
+    <p>Rating - {{ i.rating }}</p>
+    <span>Duration - {{ i.duration }}</span>
+    <a href="/films/{{i.id}}"><button>More...</button></a>
+    <hr>
+</div>
+{% endfor %}
+</body>
+</html>

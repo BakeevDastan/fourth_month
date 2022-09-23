@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{{films_detail.name}}</title>
+</head>
+<body>
+<div>
+    <a href="/films/"><button>Back</button></a>
+    <h3>Name - {{ films_detail.name }}</h3>
+    <h4>Producer - {{ films_detail.producer }}</h4>
+    <p>Rating - {{ films_detail.rating }}</p>
+    <span>Duration - {{ films_detail.duration }}</span>
+    <hr>
+    <h2>Reviews</h2>
+    {% for i in review %}
+    <p>{{ i.films }}</p>
+    <p>{{ i.text }}</p>
+    <hr>
+    {% endfor %}
+</div>
+</body>
+</html>
