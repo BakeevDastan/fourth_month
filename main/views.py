@@ -31,7 +31,8 @@ def film_item_view(request, id):
         raise Http404('Films not found')
     context = {
         'films_detail': detail,
-        'review': Review.objects.filter(films_id=id)
+        'review': Review.objects.filter(films_id=id),
+        'genre': Genre.objects.all()
     }
     return render(request, 'detail.html', context=context)
 

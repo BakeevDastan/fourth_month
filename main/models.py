@@ -15,8 +15,8 @@ class Films(models.Model):
     class Meta:
         verbose_name = 'фильм'
         verbose_name_plural = 'фильмы'
-
-    genre = models.ForeignKey(Genre, on_delete=models.PROTECT, null=True)
+    image = models.ImageField(null=True, upload_to='films', verbose_name='картинки')
+    genre = models.ForeignKey(Genre, on_delete=models.PROTECT, null=True, verbose_name='жанры')
     name = models.CharField(max_length=100, verbose_name='Имя')
     producer = models.CharField(max_length=100, verbose_name='Режисёр')
     rating = models.FloatField(default=0, verbose_name='Рейтинг')
@@ -30,7 +30,7 @@ class Review(models.Model):
     class Meta:
         verbose_name = 'отзыв'
         verbose_name_plural = 'отзывы'
-    films = models.ForeignKey(Films, on_delete=models.CASCADE, null=True)
+    films = models.ForeignKey(Films, on_delete=models.CASCADE, null=True, verbose_name='Список фильмов')
     film = models.CharField(max_length=100, verbose_name='фильм')
     text = models.TextField(verbose_name='Текст')
 

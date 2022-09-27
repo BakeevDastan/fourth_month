@@ -1,10 +1,5 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>{{films_detail.name}}</title>
-</head>
-<body>
+{% extends 'layout.html'%}
+{% block content %}
 <div>
     <a href="/films/"><button>Back</button></a>
     <h3>Name - {{ films_detail.name }}</h3>
@@ -19,5 +14,4 @@
     <hr>
     {% endfor %}
 </div>
-</body>
-</html>
+{% endblock%}
