@@ -7,7 +7,10 @@ from main.models import Films, Genre, Review
 class FilmsAdmin(admin.ModelAdmin):
 
     def image_tag(self, obj):
-        return format_html('<img src="{}" style="max-width:200px; max-height:200px"/>'.format(obj.image.url))
+        try:
+            return format_html('<img src="{}" style="max-width:200px; max-height:200px"/>'.format(obj.image.url))
+        except:
+            pass
 
     list_display = ['name', 'producer', 'rating', 'duration', 'image_tag']
     search_fields = 'name'.split()

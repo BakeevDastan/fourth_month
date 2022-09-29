@@ -1,15 +1,29 @@
 {% extends 'layout.html'%}
 {% block content %}
 <div>
-    <a href="/films/"><button>Back</button></a>
+    <a href="/films/">
+        <button>Back</button>
+    </a>
     <h3>Name - {{ films_detail.name }}</h3>
     <h4>Producer - {{ films_detail.producer }}</h4>
     <p>Rating - {{ films_detail.rating }}</p>
     <span>Duration - {{ films_detail.duration }}</span>
     <hr>
-    <h2>Reviews</h2>
+     <h2>Reviews</h2>
+    <div class="form-content" style="padding: 0 100px 0; margin:20px;">
+        <form action="/films/{{films_detail.id}}/" method="post">
+            {% csrf_token%}
+            <p>
+                <input type="text" class="form-control" placeholder="Фильм" name="film">
+            </p>
+            <p>
+                <input type="text" class="form-control" placeholder="Текст" name="text">
+            </p>
+            <input style="display:block;margin: 0 auto;" type="submit" class="btn btn-secondary">
+        </form>
+    </div>
     {% for i in review %}
-    <p>{{ i.films }}</p>
+    <p>{{ i.film }}</p>
     <p>{{ i.text }}</p>
     <hr>
     {% endfor %}

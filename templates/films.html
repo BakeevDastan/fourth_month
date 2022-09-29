@@ -1,15 +1,21 @@
 {% extends 'layout.html'%}
 {% load static %}
 {% block content %}
-    <h1> {{ title }}</h1>
-    {% for i in film_list%}
-        <div class="card" style="width: 18rem; margin:10px">
-            <img src="{{ i.image.url }}" style="width:200px; height:200px; margin:30px" class="card-img-top" alt="...">
-                <div class="card-body">
-                    <h5 class="card-title">{{ i.name }}</h5>
-                    <p class="card-text">{{ i.genre.title }}</p>
-                     <a href="/films/{{i.id}}" class="btn btn-primary">More...</a>
-                </div>
+<h1> {{ title }}</h1>
+{% for i in film_list%}
+<div class="card" style="width: 18rem; margin:10px">
+    <img
+            {% if i.image %}
+            src="{{ i.image.url }}"
+            {% else %}
+            src="{% static 'images/arch.png' %}"
+            {% endif %}
+            class="card-img-top" style="width:200px; height:200px; margin:30px" alt="...">
+    <div class="card-body">
+        <h5 class="card-title">{{ i.name }}</h5>
+        <p class="card-text">{{ i.genre.title }}</p>
+        <a href="/films/{{i.id}}" class="btn btn-primary">More...</a>
+    </div>
 </div>
-        {% endfor %}
+{% endfor %}
 {% endblock %}

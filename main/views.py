@@ -1,6 +1,7 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.http import HttpResponse, Http404
 import datetime
+from main.forms import FilmsCreateForm
 from main.models import Films, Review, Genre
 
 
@@ -29,12 +30,23 @@ def film_item_view(request, id):
         detail = Films.objects.get(id=id)
     except Films.DoesNotExist:
         raise Http404('Films not found')
-    context = {
-        'films_detail': detail,
-        'review': Review.objects.filter(films_id=id),
-        'genre': Genre.objects.all()
-    }
-    return render(request, 'detail.html', context=context)
+    if request.method == 'GET':
+        context = {
+            'films_detail': detail,
+            'review': Review.objects.filter(films_id=id),
+            'genre': Genre.objects.all()
+        }
+        return render(request, 'detail.html', context=context)
+    else:
+        film = request.POST.get('film')
+        text = request.POST.get('text')
+        Review.objects.create(
+            film=film,
+            text=text,
+            films_id=id
+        )
+        print(request.POST)
+        return redirect(f'/films/{id}')
 
 
 def genre_view(request, id):
@@ -48,3 +60,22 @@ def genre_view(request, id):
         'genre': Genre.objects.all()
     }
     return render(request, 'films.html', context=context)
+
+
+def films_create_view(request):
+    if request.method == 'GET':
+        context = {
+            'form': FilmsCreateForm(),
+            'genre': Genre.objects.all()
+        }
+        return render(request, 'add_films.html', context=context)
+    else:
+        form = FilmsCreateForm(data=request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('/films/')
+        print(request.POST)
+        return render(request, 'add_films.html', context={
+            'form': form,
+            'genre': Genre.objects.all()
+        })

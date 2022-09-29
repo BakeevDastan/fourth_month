@@ -25,7 +25,8 @@ urlpatterns = [
     path('date_now/', views.date_now),
     path('films/', views.film_list_view),
     path('films/<int:id>/', views.film_item_view),
-    path('genre/<int:id>/films', views.genre_view)
+    path('genre/<int:id>/films', views.genre_view),
+    path('add_films/', views.films_create_view)
 ]
 urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
