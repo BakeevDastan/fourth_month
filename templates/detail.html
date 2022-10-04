@@ -10,6 +10,7 @@
     <span>Duration - {{ films_detail.duration }}</span>
     <hr>
      <h2>Reviews</h2>
+    {% if user.is_authenticated %}
     <div class="form-content" style="padding: 0 100px 0; margin:20px;">
         <form action="/films/{{films_detail.id}}/" method="post">
             {% csrf_token%}
@@ -22,6 +23,7 @@
             <input style="display:block;margin: 0 auto;" type="submit" class="btn btn-secondary">
         </form>
     </div>
+     {% endif %}
     {% for i in review %}
     <p>{{ i.film }}</p>
     <p>{{ i.text }}</p>

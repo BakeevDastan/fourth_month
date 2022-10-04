@@ -1,8 +1,11 @@
 from django.shortcuts import render, redirect
 from django.http import HttpResponse, Http404
 import datetime
-from main.forms import FilmsCreateForm
+from main.forms import FilmsCreateForm, UserCreateForm, LoginForm
 from main.models import Films, Review, Genre
+from django.contrib.auth.models import User
+from django.contrib.auth import authenticate, logout, login
+from django.contrib.auth.decorators import login_required
 
 
 def date_now(request):
@@ -62,6 +65,7 @@ def genre_view(request, id):
     return render(request, 'films.html', context=context)
 
 
+@login_required(login_url='/login')
 def films_create_view(request):
     if request.method == 'GET':
         context = {
@@ -79,3 +83,51 @@ def films_create_view(request):
             'form': form,
             'genre': Genre.objects.all()
         })
+
+
+def register_view(request):
+    context = {
+        'form': UserCreateForm(),
+        'genre': Genre.objects.all()
+
+    }
+    if request.method == 'POST':
+        form = UserCreateForm(data=request.POST)
+        if form.is_valid():
+            username = form.cleaned_data.get('username')
+            email = form.cleaned_data.get('email')
+            password = form.cleaned_data.get('password')
+            User.objects.create_user(username=username,
+                                     password=password,
+                                     email=email,
+                                     is_active=True)
+            return redirect('/login')
+        else:
+            context = {
+                'form': form,
+                'genre': Genre.objects.all()
+            }
+    return render(request, 'register.html', context=context)
+
+
+def login_view(request):
+    context = {
+        'form': LoginForm(),
+        'genre': Genre.objects.all()
+    }
+    if request.method == 'POST':
+        form = LoginForm(data=request.POST)
+        if form.is_valid():
+            username = form.cleaned_data['username']
+            password = form.cleaned_data['password']
+            user = authenticate(username=username, password=password)
+            if user:
+                login(request, user)
+                return redirect('/films')
+        return redirect('/login')
+    return render(request, 'login.html', context=context)
+
+
+def logout_view(request):
+    logout(request)
+    return redirect('/login')

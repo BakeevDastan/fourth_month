@@ -26,7 +26,11 @@ urlpatterns = [
     path('films/', views.film_list_view),
     path('films/<int:id>/', views.film_item_view),
     path('genre/<int:id>/films', views.genre_view),
-    path('add_films/', views.films_create_view)
+    path('add_films/', views.films_create_view),
+    path('register/', views.register_view),
+    path('login/', views.login_view),
+    path('logout/', views.logout_view)
+
 ]
 urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
