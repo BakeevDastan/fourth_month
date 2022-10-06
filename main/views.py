@@ -6,6 +6,7 @@ from main.models import Films, Review, Genre
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, logout, login
 from django.contrib.auth.decorators import login_required
+from django.db.models import Q
 
 
 def date_now(request):
@@ -18,12 +19,27 @@ def about_us(request):
     return render(request, 'index.html')
 
 
+PAGE_SIZE = 2
+
+
 def film_list_view(request):
-    queryset = Films.objects.all()
+    page = int(request.GET.get('page', 1))
+    all_films = Films.objects.all()
+    queryset = all_films[PAGE_SIZE * (page - 1):PAGE_SIZE * page]
+    if all_films.count() % PAGE_SIZE == 0:
+        count_buttons = all_films.count() // PAGE_SIZE
+    else:
+        count_buttons = all_films.count() // PAGE_SIZE + 1
     context = {
         'title': 'All news',
         'film_list': queryset,
-        'genre': Genre.objects.all()
+        'next': page + 1,
+        'next_disabled': 'disabled' if page >= count_buttons else '',
+        'prev': page - 1,
+        'prev_disabled': 'disabled' if page == 1 else '',
+        'page': page,
+        'genre': Genre.objects.all(),
+        'buttons': [i for i in range(1, count_buttons + 1)]
     }
     return render(request, 'films.html', context=context)
 
@@ -131,3 +147,15 @@ def login_view(request):
 def logout_view(request):
     logout(request)
     return redirect('/login')
+
+
+def search_view(request):
+    search = request.GET.get('search_word', '')
+    queryset = Films.objects.filter(Q(name__icontains=search) |
+                                    Q(producer__icontains=search))
+    context = {
+        'title': 'Results of search' if queryset else 'Films not found',
+        'film_list': queryset,
+        'genre': Genre.objects.all()
+    }
+    return render(request, 'search.html', context=context)
